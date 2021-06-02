@@ -20,7 +20,7 @@ namespace CasinoDiceRoller
                 {
                     string input = GetUserInput("How many sides would you like your dice to have?");
                     int sidesOfDice = int.Parse(input);
-                    if(sidesOfDice == 0)
+                    if (sidesOfDice == 0)
                     {
                         Console.WriteLine("Number of sides must be greater than 0. Please try again. \n");
                         goOn = true;
@@ -32,7 +32,7 @@ namespace CasinoDiceRoller
                     int total = diceOne + diceTwo;
                     Console.WriteLine($"You rolled a {diceOne} and {diceTwo}.  Total ({total})");
 
-                    if (sidesOfDice == 6)
+                    if (HasSixSides(sidesOfDice) == true)
                     {
                         if (diceOne == 1 && diceTwo == 1)
                         {
@@ -60,11 +60,11 @@ namespace CasinoDiceRoller
                         }
 
                     }
-                    if (sidesOfDice == 6 && total == 7 || total == 11)
+                    if ((HasSixSides(sidesOfDice) == true) && (GetWinTotal(total) == true))
                     {
                         Console.WriteLine("Win!");
                     }
-                    else if (sidesOfDice == 6 && total == 2 || total == 3 || total == 12)
+                    else if ((HasSixSides(sidesOfDice) == true) && (GetCrapsTotal(total) == true))
                     {
                         Console.WriteLine("Craps!");
                     }
@@ -89,6 +89,19 @@ namespace CasinoDiceRoller
         }
 
 
+        public static bool HasSixSides(int sides)
+        {
+            if (sides == 6)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
         public static string GetUserInput(string message)
         {
             Console.WriteLine(message);
@@ -98,10 +111,36 @@ namespace CasinoDiceRoller
 
         public static int GetRandomDice(int min, int max)
         {
-                Random random = new Random();
-                int dice = random.Next(min, max + 1);
-                return dice;
+            Random random = new Random();
+            int dice = random.Next(min, max + 1);
+            return dice;
         }
+
+        public static bool GetWinTotal(int total)
+        {
+            if (total == 7 || total == 11)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool GetCrapsTotal(int total)
+        {
+            if (total == 2 || total == 3 || total == 12)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
         public static bool GetContinue()
         {
             Console.WriteLine();
