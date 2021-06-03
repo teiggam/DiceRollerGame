@@ -18,55 +18,33 @@ namespace CasinoDiceRoller
             {
                 try
                 {
-                    string input = GetUserInput("How many sides would you like your dice to have?");
+                    string input = GetUserInput("How many sides would you like your pair of dice to have?");
                     int sidesOfDice = int.Parse(input);
+                
                     if (sidesOfDice == 0)
                     {
                         Console.WriteLine("Number of sides must be greater than 0. Please try again. \n");
                         goOn = true;
                         continue;
                     }
-
-                    int diceOne = GetRandomDice(1, sidesOfDice);
-                    int diceTwo = GetRandomDice(1, sidesOfDice);
-                    int total = diceOne + diceTwo;
-                    Console.WriteLine($"You rolled a {diceOne} and {diceTwo}.  Total ({total})");
-
-                    if (HasSixSides(sidesOfDice) == true)
+                    bool rollAgain = true;
+                    while (rollAgain == true)
                     {
-                        if (diceOne == 1 && diceTwo == 1)
-                        {
-                            Console.WriteLine("Snake Eyes!");
-                        }
-                        else if (diceOne == 1)
-                        {
-                            if (diceTwo == 2)
-                            {
-                                Console.WriteLine("Ace Deuce!");
-                            }
+                        Console.WriteLine("Please press any key to roll these dice.");
+                        Console.ReadKey();
+                        Console.WriteLine();
 
-                        }
-                        else if (diceOne == 2)
-                        {
-                            if (diceTwo == 1)
-                            {
-                                Console.WriteLine("Ace Deuce!");
-                            }
+                        int diceOne = GetRandomDice(1, sidesOfDice);
+                        int diceTwo = GetRandomDice(1, sidesOfDice);
+                        int total = diceOne + diceTwo;
+                        Console.WriteLine($"You rolled a {diceOne} and {diceTwo}.  Total ({total})");
 
-                        }
-                        else if (diceOne == 6 && diceTwo == 6)
+                        if (HasSixSides(sidesOfDice) == true)
                         {
-                            Console.WriteLine("Box Cars!");
+                            PrintOutput(diceOne, diceTwo, total);
                         }
-
-                    }
-                    if ((HasSixSides(sidesOfDice) == true) && (GetWinTotal(total) == true))
-                    {
-                        Console.WriteLine("Win!");
-                    }
-                    else if ((HasSixSides(sidesOfDice) == true) && (GetCrapsTotal(total) == true))
-                    {
-                        Console.WriteLine("Craps!");
+                        rollAgain = GetContinue();
+                        Console.WriteLine();
                     }
                 }
                 catch (FormatException)
@@ -84,10 +62,44 @@ namespace CasinoDiceRoller
                     Console.WriteLine("The number must be a positive integer.  Please try again. \n");
                     continue;
                 }
-                goOn = GetContinue();
+                goOn = GetNewDice();
             }
         }
 
+
+        public static void PrintOutput(int diceOne, int diceTwo, int total)
+        { 
+                if (diceOne == 1 && diceTwo == 1)
+                {
+                    Console.WriteLine("Snake Eyes!");
+                }
+                else if (diceOne == 1)
+                {
+                    if (diceTwo == 2)
+                    {
+                        Console.WriteLine("Ace Deuce!");
+                    }
+                }
+                else if (diceOne == 2)
+                {
+                    if (diceTwo == 1)
+                    {
+                        Console.WriteLine("Ace Deuce!");
+                    }
+                }
+                else if (diceOne == 6 && diceTwo == 6)
+                {
+                    Console.WriteLine("Box Cars!");
+                }
+            if ((GetWinTotal(total) == true))
+            {
+                Console.WriteLine("Win!");
+            }
+            else if ((GetCrapsTotal(total) == true))
+            {
+                Console.WriteLine("Craps!");
+            }
+        }
 
         public static bool HasSixSides(int sides)
         {
@@ -100,7 +112,6 @@ namespace CasinoDiceRoller
                 return false;
             }
         }
-
 
         public static string GetUserInput(string message)
         {
@@ -127,7 +138,6 @@ namespace CasinoDiceRoller
                 return false;
             }
         }
-
         public static bool GetCrapsTotal(int total)
         {
             if (total == 2 || total == 3 || total == 12)
@@ -140,11 +150,32 @@ namespace CasinoDiceRoller
             }
 
         }
-
         public static bool GetContinue()
         {
             Console.WriteLine();
-            Console.WriteLine("Would you like to roll again? y/n");
+            Console.WriteLine("Would you like to roll these dice again? y/n");
+            string answer = Console.ReadLine();
+
+            if (answer.ToLower() == "y")
+            {
+                return true;
+            }
+            else if (answer.ToLower() == "n")
+            {
+                return false;
+            }
+            else
+            {
+                Console.WriteLine("I didn't understand your response, please try again...");
+            }
+            return GetContinue();
+
+        }
+
+        public static bool GetNewDice()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Would you like to roll new dice? y/n");
             string answer = Console.ReadLine();
 
             if (answer.ToLower() == "y")
@@ -160,7 +191,8 @@ namespace CasinoDiceRoller
             {
                 Console.WriteLine("I didn't understand your response, please try again...");
             }
-            return GetContinue();
+            return GetNewDice();
+
 
         }
     }
